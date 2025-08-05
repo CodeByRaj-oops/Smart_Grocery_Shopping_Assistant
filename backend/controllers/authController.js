@@ -2,6 +2,7 @@ const asyncHandler = require('express-async-handler');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
+const passport = require('../config/passport');
 
 // Generate JWT
 const generateToken = (id) => {
@@ -153,6 +154,43 @@ const refreshToken = asyncHandler(async (req, res) => {
     res.status(401);
     throw new Error('Invalid refresh token');
   }
+});
+
+// @desc    Google OAuth login - initiate
+// @route   GET /api/auth/google
+// @access  Public
+const googleAuth = (req, res, next) => {
+  passport.authenticate('google', { scope: ['profile', 'email'] })(req, res, next);
+};
+
+// @desc    Google OAuth callback
+// @route   GET /api/auth/google/callback
+// @access  Public
+const googleCallback = asyncHandler(async (req, res, next) => {
+  passport.authenticate('google', { session: false }, async (err, user) => {
+    if (err) {
+      return res.redirect(`${process.env.FRONTEND_URL}/login?error=${encodeURIComponent(err.message)}`);
+    }
+    
+    if (!user) {
+      return res.redirect(`${process.env.FRONTEND_URL}/login?error=Authentication failed`);
+    }
+
+    // Generate tokens
+    const accessToken = generateToken(user._id);
+    const { token: refreshToken, tokenId } = generateRefreshToken(user._id);
+
+    // Save refresh token ID to user
+    user.refreshTokens = user.refreshTokens || [];
+    user.refreshTokens.push({ tokenId, createdAt: new Date() });
+    user.lastLoginAt = new Date();
+    await user.save();
+
+    // Redirect to frontend with tokens
+    return res.redirect(
+      `${process.env.FRONTEND_URL}/oauth-callback?accessToken=${accessToken}&refreshToken=${refreshToken}&userId=${user._id}`
+    );
+  })(req, res, next);
 });
 
 // @desc    Logout user
@@ -313,4 +351,6 @@ module.exports = {
   forgotPassword,
   resetPassword,
   verifyEmail,
+  googleAuth,
+  googleCallback,
 };

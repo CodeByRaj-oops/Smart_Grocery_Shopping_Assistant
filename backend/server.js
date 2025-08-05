@@ -2,8 +2,10 @@ const express = require('express');
 const dotenv = require('dotenv');
 const colors = require('colors');
 const cors = require('cors');
+const passport = require('passport');
 const { errorHandler } = require('./middleware/errorMiddleware');
 const connectDB = require('./config/db');
+require('./config/passport');
 
 // Load environment variables
 dotenv.config();
@@ -17,16 +19,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(passport.initialize());
 
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));
-app.use('/api/lists', require('./routes/listRoutes'));
+app.use('/api/lists', require('./routes/groceryListRoutes'));
 app.use('/api/inventory', require('./routes/inventoryRoutes'));
 app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/recipes', require('./routes/recipeRoutes'));
-app.use('/api/stores', require('./routes/storeRoutes'));
-app.use('/api/shopping', require('./routes/shoppingRoutes'));
 
 // Health check endpoint
 app.get('/health', (req, res) => {

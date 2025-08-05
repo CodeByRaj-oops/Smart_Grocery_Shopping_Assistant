@@ -7,7 +7,9 @@ const {
   logoutUser,
   forgotPassword,
   resetPassword,
-  verifyEmail
+  verifyEmail,
+  googleAuth,
+  googleCallback
 } = require('../controllers/authController');
 
 // @route   POST /api/auth/register
@@ -44,5 +46,15 @@ router.post('/reset-password', resetPassword);
 // @desc    Verify email address
 // @access  Public (with token)
 router.get('/verify-email', verifyEmail);
+
+// @route   GET /api/auth/google
+// @desc    Google OAuth login
+// @access  Public
+router.get('/google', googleAuth);
+
+// @route   GET /api/auth/google/callback
+// @desc    Google OAuth callback
+// @access  Public
+router.get('/google/callback', googleCallback);
 
 module.exports = router;

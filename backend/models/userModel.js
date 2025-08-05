@@ -12,7 +12,18 @@ const userSchema = mongoose.Schema(
     },
     password: {
       type: String,
-      required: [true, 'Please add a password'],
+      required: function() {
+        return !this.googleId; // Password is required only if not using Google OAuth
+      },
+    },
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true, // This allows null values and only enforces uniqueness on non-null values
+    },
+    googleProfile: {
+      type: Object,
+      default: null,
     },
     profile: {
       firstName: {

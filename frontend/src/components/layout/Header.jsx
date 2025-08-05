@@ -16,8 +16,8 @@ const Header = () => {
     setAnchorEl(null);
   };
 
-  // Mock authentication state - would come from Redux in real app
-  const isAuthenticated = false;
+  // Always authenticated
+  const isAuthenticated = true;
 
   return (
     <AppBar position="static" color="primary">
