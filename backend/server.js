@@ -5,7 +5,6 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const { errorHandler } = require('./middleware/errorMiddleware');
 const connectDB = require('./config/db');
-require('./config/passport');
 
 // Load environment variables
 dotenv.config();

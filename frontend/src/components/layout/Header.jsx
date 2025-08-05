@@ -9,6 +9,8 @@ import { logout } from '../../store/slices/authSlice';
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -16,6 +18,12 @@ const Header = () => {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+  
+  const handleLogout = () => {
+    dispatch(logout());
+    handleClose();
+    navigate('/');
   };
 
   return (
@@ -68,7 +76,7 @@ const Header = () => {
             >
               <MenuItem component={Link} to="/profile" onClick={handleClose}>Profile</MenuItem>
               <MenuItem component={Link} to="/inventory" onClick={handleClose}>Inventory</MenuItem>
-              <MenuItem onClick={handleClose}>Logout</MenuItem>
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
           </Box>
       </Toolbar>
