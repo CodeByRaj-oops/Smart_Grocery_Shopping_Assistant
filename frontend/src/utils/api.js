@@ -63,9 +63,9 @@ api.interceptors.response.use(
           return api(originalRequest);
         }
       } catch (refreshError) {
-        // If refresh fails, redirect to login
+        // If refresh fails, redirect to home page instead of login
         localStorage.removeItem('user');
-        window.location.href = '/login';
+        window.location.href = '/';
         return Promise.reject(refreshError);
       }
     }
@@ -73,5 +73,7 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+localStorage.removeItem('user');
+window.location.href = '/';
 
 export default api;

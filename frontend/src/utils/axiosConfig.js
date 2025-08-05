@@ -61,15 +61,18 @@ axiosInstance.interceptors.response.use(
         }
       } catch (refreshError) {
         console.error('Token refresh failed:', refreshError);
-        // If refresh fails, redirect to login
+        // If refresh fails, redirect to home page instead of login
         localStorage.removeItem('user');
-        window.location.href = '/login';
+        window.location.href = '/';
         return Promise.reject(refreshError);
       }
     }
     
     return Promise.reject(error);
   }
+  
 );
-
+// If refresh fails, redirect to home page instead of login
+localStorage.removeItem('user');
+window.location.href = '/';
 export default axiosInstance;
