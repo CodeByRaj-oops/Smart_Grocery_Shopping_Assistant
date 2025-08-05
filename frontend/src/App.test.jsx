@@ -1,5 +1,5 @@
 import App from './App';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import Layout from './components/layout/Layout';
 import Home from './pages/Home';
 

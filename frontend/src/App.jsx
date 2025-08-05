@@ -19,6 +19,12 @@ import GroceryListForm from './components/grocery/GroceryListForm';
 import Inventory from './pages/Inventory';
 import InventoryItemForm from './components/inventory/InventoryItemForm';
 
+// Auth Components
+import Login from './components/auth/Login';
+import Register from './components/auth/Register';
+import ProtectedRoute from './components/auth/ProtectedRoute';
+import AuthTest from './components/auth/AuthTest';
+
 function App() {
   return (
     <Provider store={store}>
@@ -33,42 +39,66 @@ function App() {
             } />
             <Route path="/lists" element={
               <Layout>
-                <GroceryLists />
+                <ProtectedRoute>
+                  <GroceryLists />
+                </ProtectedRoute>
               </Layout>
             } />
             <Route path="/lists/:id" element={
               <Layout>
-                <GroceryListDetail />
+                <ProtectedRoute>
+                  <GroceryListDetail />
+                </ProtectedRoute>
               </Layout>
             } />
             <Route path="/lists/new" element={
               <Layout>
-                <GroceryListForm />
+                <ProtectedRoute>
+                  <GroceryListForm />
+                </ProtectedRoute>
               </Layout>
             } />
-            <Route path="/test-auth" element={
+            <Route path="/login" element={
               <Layout>
-                <div>Auth Test Page</div>
+                <Login />
+              </Layout>
+            } />
+            <Route path="/register" element={
+              <Layout>
+                <Register />
+              </Layout>
+            } />
+            <Route path="/auth-test" element={
+              <Layout>
+                <AuthTest />
               </Layout>
             } />
             <Route path="/lists/edit/:id" element={
               <Layout>
-                <GroceryListForm />
+                <ProtectedRoute>
+                  <GroceryListForm />
+                </ProtectedRoute>
               </Layout>
             } />
             <Route path="/inventory" element={
               <Layout>
-                <Inventory />
+                <ProtectedRoute>
+                  <Inventory />
+                </ProtectedRoute>
               </Layout>
             } />
             <Route path="/inventory/new" element={
               <Layout>
-                <InventoryItemForm />
+                <ProtectedRoute>
+                  <InventoryItemForm />
+                </ProtectedRoute>
               </Layout>
             } />
             <Route path="/inventory/edit/:id" element={
               <Layout>
-                <InventoryItemForm />
+                <ProtectedRoute>
+                  <InventoryItemForm />
+                </ProtectedRoute>
               </Layout>
             } />
           </Routes>

@@ -57,21 +57,11 @@ const GroceryLists = () => {
   const [menuListId, setMenuListId] = useState(null);
   
   useEffect(() => {
-    // Auto-create user if not exists
-    if (!user) {
-      const defaultUser = {
-        id: '1',
-        name: 'Default User',
-        email: 'user@example.com',
-        token: 'default-token',
-        refreshToken: 'default-refresh-token'
-      };
-      localStorage.setItem('user', JSON.stringify(defaultUser));
-      dispatch(getGroceryLists());
-    } else {
+    // Only fetch grocery lists if user is authenticated (not the default user)
+    if (user && user.id !== '1') {
       dispatch(getGroceryLists());
     }
-  }, [user, navigate, dispatch]);
+  }, [user, dispatch]);
   
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);

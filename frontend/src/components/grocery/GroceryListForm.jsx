@@ -81,26 +81,15 @@ const GroceryListForm = () => {
   ];
   
   useEffect(() => {
-    // Auto-create user if not exists
-    if (!user) {
-      const defaultUser = {
-        id: '1',
-        name: 'Default User',
-        email: 'user@example.com',
-        token: 'default-token',
-        refreshToken: 'default-refresh-token'
-      };
-      localStorage.setItem('user', JSON.stringify(defaultUser));
-    }
-    
-    if (isEditMode && (!currentList || currentList._id !== id)) {
+    // Only fetch grocery list if user is authenticated (not the default user) and in edit mode
+    if (user && user.id !== '1' && isEditMode && (!currentList || currentList._id !== id)) {
       dispatch(getGroceryList(id));
     }
     
     return () => {
       dispatch(clearCurrentList());
     };
-  }, [user, navigate, dispatch, isEditMode, id, currentList]);
+  }, [user, dispatch, isEditMode, id, currentList]);
   
   useEffect(() => {
     if (isEditMode && currentList) {

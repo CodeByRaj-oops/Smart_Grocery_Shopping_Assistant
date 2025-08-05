@@ -36,8 +36,8 @@ const Home = () => {
   const { inventory, isLoading: inventoryLoading } = useSelector((state) => state.inventory);
   
   useEffect(() => {
-    // Only dispatch actions if user exists
-    if (user) {
+    // Only dispatch actions if user exists and is not the default user
+    if (user && user.id !== '1') {
       dispatch(getGroceryLists());
       dispatch(getInventory());
     }
@@ -68,31 +68,72 @@ const Home = () => {
     );
   }
   
+  // Check if user is the default user (not authenticated)
+  const isDefaultUser = user && user.id === '1';
+
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" component="h1" gutterBottom>
-        Welcome, {user?.profile?.firstName || 'User'}!
+        Welcome to ShopSmartly!
       </Typography>
       
-      <Grid container spacing={3}>
-        {/* Quick Actions */}
-        <Grid item xs={12} md={8}>
-          <Paper sx={{ p: 3, mb: 3 }}>
-            <Typography variant="h5" gutterBottom>
-              Quick Actions
-            </Typography>
-            <Grid container spacing={2} sx={{ mt: 1 }}>
-              <Grid item xs={6} sm={6}>
-                <Button
-                  variant="outlined"
-                  fullWidth
-                  startIcon={<ShoppingCart />}
-                  onClick={() => navigate('/lists/new')}
-                  sx={{ height: '100%' }}
-                >
-                  New List
-                </Button>
+      {isDefaultUser ? (
+        // Content for non-authenticated users
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Paper sx={{ p: 3, mb: 3 }}>
+              <Typography variant="h5" gutterBottom>
+                Smart Grocery Shopping Assistant
+              </Typography>
+              <Typography paragraph>
+                Manage your grocery lists, track your household inventory, and get personalized recommendations.
+              </Typography>
+              <Grid container spacing={2} sx={{ mt: 3 }}>
+                <Grid item xs={12} sm={6}>
+                  <Button
+                    variant="contained"
+                    fullWidth
+                    color="primary"
+                    onClick={() => navigate('/login')}
+                  >
+                    Login
+                  </Button>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <Button
+                    variant="outlined"
+                    fullWidth
+                    color="primary"
+                    onClick={() => navigate('/register')}
+                  >
+                    Register
+                  </Button>
+                </Grid>
               </Grid>
+            </Paper>
+          </Grid>
+        </Grid>
+      ) : (
+        // Content for authenticated users
+        <Grid container spacing={3}>
+          {/* Quick Actions */}
+          <Grid item xs={12} md={8}>
+            <Paper sx={{ p: 3, mb: 3 }}>
+              <Typography variant="h5" gutterBottom>
+                Quick Actions
+              </Typography>
+              <Grid container spacing={2} sx={{ mt: 1 }}>
+                <Grid item xs={6} sm={6}>
+                  <Button
+                    variant="outlined"
+                    fullWidth
+                    startIcon={<ShoppingCart />}
+                    onClick={() => navigate('/lists/new')}
+                    sx={{ height: '100%' }}
+                  >
+                    New List
+                  </Button>
+                </Grid>
               <Grid item xs={6} sm={6}>
                 <Button
                   variant="outlined"
@@ -270,6 +311,7 @@ const Home = () => {
           </Paper>
         </Grid>
       </Grid>
+      )}
     </Box>
   );
 };

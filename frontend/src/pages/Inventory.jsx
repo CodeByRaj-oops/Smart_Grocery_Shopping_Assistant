@@ -66,21 +66,11 @@ const Inventory = () => {
   const sortMenuOpen = Boolean(sortAnchorEl);
   
   useEffect(() => {
-    // Auto-create user if not exists
-    if (!user) {
-      const defaultUser = {
-        id: '1',
-        name: 'Default User',
-        email: 'user@example.com',
-        token: 'default-token',
-        refreshToken: 'default-refresh-token'
-      };
-      localStorage.setItem('user', JSON.stringify(defaultUser));
-      dispatch(getInventory());
-    } else {
+    // Only fetch inventory if user is authenticated (not the default user)
+    if (user && user.id !== '1') {
       dispatch(getInventory());
     }
-  }, [user, navigate, dispatch]);
+  }, [user, dispatch]);
   
   // Handle item menu open
   const handleMenuOpen = (event, item) => {

@@ -68,21 +68,11 @@ const GroceryListDetail = () => {
   const [optionsAnchorEl, setOptionsAnchorEl] = useState(null);
   
   useEffect(() => {
-    // Auto-create user if not exists
-    if (!user) {
-      const defaultUser = {
-        id: '1',
-        name: 'Default User',
-        email: 'user@example.com',
-        token: 'default-token',
-        refreshToken: 'default-refresh-token'
-      };
-      localStorage.setItem('user', JSON.stringify(defaultUser));
-      dispatch(getGroceryList(id));
-    } else {
+    // Only fetch grocery list if user is authenticated (not the default user)
+    if (user && user.id !== '1') {
       dispatch(getGroceryList(id));
     }
-  }, [user, navigate, dispatch, id]);
+  }, [user, dispatch, id]);
   
   useEffect(() => {
     if (currentList && currentList.items) {

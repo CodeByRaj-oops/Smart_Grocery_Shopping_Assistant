@@ -4,57 +4,62 @@ import { createSlice } from '@reduxjs/toolkit';
 const defaultUser = {
   id: '1',
   name: 'Default User',
-  email: 'user@example.com',
-  token: 'default-token',
-  refreshToken: 'default-refresh-token'
+  token: 'default-token'
 };
 
-// Always use the default user
-if (!localStorage.getItem('user')) {
+// Get user from localStorage
+let user = null;
+try {
+  user = JSON.parse(localStorage.getItem('user'));
+  if (!user) {
+    localStorage.setItem('user', JSON.stringify(defaultUser));
+    user = defaultUser;
+  }
+} catch (error) {
+  console.error('Error parsing user from localStorage:', error);
   localStorage.setItem('user', JSON.stringify(defaultUser));
+  user = defaultUser;
 }
 
-const user = JSON.parse(localStorage.getItem('user'));
+// Simple login function to set username
+export const setUsername = (username) => {
+  const newUser = {
+    id: Date.now().toString(),
+    name: username,
+    token: 'user-token-' + Date.now()
+  };
+  localStorage.setItem('user', JSON.stringify(newUser));
+  return newUser;
+};
+
 
 const initialState = {
   user: user,
-  isLoading: false,
-  isSuccess: true,
-  isError: false,
-  message: '',
-};
-  // Simplified auth slice with no API calls
-
-// Renamed to logoutUser to avoid naming conflict
-const logoutUser = () => {
-  localStorage.removeItem('user');
-  // Set default user again
-  localStorage.setItem('user', JSON.stringify(defaultUser));
-  return { type: 'auth/logout' };
+  isSuccess: false,
 };
 
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    reset: (state) => {
-      state.isLoading = false;
+    // Set username action
+    setUser: (state, action) => {
+      state.user = action.payload;
       state.isSuccess = true;
-      state.isError = false;
-      state.message = '';
     },
     // Handle logout action
     logout: (state) => {
-      // We don't actually set user to null anymore
-      // Instead we just reset the state
-      state.isSuccess = true;
-      state.isError = false;
-      state.message = '';
+      state.user = defaultUser;
+      state.isSuccess = false;
       // Add localStorage handling here to ensure it happens
       localStorage.removeItem('user');
       localStorage.setItem('user', JSON.stringify(defaultUser));
     }
   }
+});
+
+export const { setUser, logout } = authSlice.actions;
+export default authSlice.reducer;
 });
 
 export const { reset, logout } = authSlice.actions;

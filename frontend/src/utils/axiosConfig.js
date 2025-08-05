@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create axios instance with default config
 const axiosInstance = axios.create({
-  baseURL: '',
+  baseURL: process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5001',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ axiosInstance.interceptors.response.use(
     const originalRequest = error.config;
     
     // If the error is 401 and not already retrying
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (error.response && error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       
       try {
@@ -70,9 +70,6 @@ axiosInstance.interceptors.response.use(
     
     return Promise.reject(error);
   }
-  
 );
-// If refresh fails, redirect to home page instead of login
-localStorage.removeItem('user');
-window.location.href = '/';
+
 export default axiosInstance;

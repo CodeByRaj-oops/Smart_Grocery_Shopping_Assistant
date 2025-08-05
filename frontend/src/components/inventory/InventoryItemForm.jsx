@@ -52,14 +52,19 @@ const InventoryItemForm = () => {
   // Check if we're editing an existing item
   const isEditMode = Boolean(id);
   
+  const { user } = useSelector((state) => state.auth);
+
   // Load inventory data and populate form if in edit mode
   useEffect(() => {
-    dispatch(getInventory());
+    // Only fetch inventory if user is authenticated (not the default user)
+    if (user && user.id !== '1') {
+      dispatch(getInventory());
+    }
     
     return () => {
       dispatch(reset());
     };
-  }, [dispatch]);
+  }, [dispatch, user]);
   
   // Populate form with existing item data when in edit mode
   useEffect(() => {
