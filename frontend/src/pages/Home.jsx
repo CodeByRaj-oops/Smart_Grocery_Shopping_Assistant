@@ -89,24 +89,14 @@ const Home = () => {
                 Manage your grocery lists, track your household inventory, and get personalized recommendations.
               </Typography>
               <Grid container spacing={2} sx={{ mt: 3 }}>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12}>
                   <Button
                     variant="contained"
                     fullWidth
                     color="primary"
                     onClick={() => navigate('/login')}
                   >
-                    Login
-                  </Button>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <Button
-                    variant="outlined"
-                    fullWidth
-                    color="primary"
-                    onClick={() => navigate('/register')}
-                  >
-                    Register
+                    Enter Username
                   </Button>
                 </Grid>
               </Grid>

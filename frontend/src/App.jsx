@@ -21,7 +21,6 @@ import InventoryItemForm from './components/inventory/InventoryItemForm';
 
 // Auth Components
 import Login from './components/auth/Login';
-import Register from './components/auth/Register';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import AuthTest from './components/auth/AuthTest';
 
@@ -61,11 +60,6 @@ function App() {
             <Route path="/login" element={
               <Layout>
                 <Login />
-              </Layout>
-            } />
-            <Route path="/register" element={
-              <Layout>
-                <Register />
               </Layout>
             } />
             <Route path="/auth-test" element={

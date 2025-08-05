@@ -52,10 +52,7 @@ const AuthTest = () => {
                   <ListItemText primary="ID" secondary={user?.id || 'Not available'} />
                 </ListItem>
                 <ListItem>
-                  <ListItemText primary="Name" secondary={user?.name || 'Not available'} />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Email" secondary={user?.email || 'Not available'} />
+                  <ListItemText primary="Username" secondary={user?.name || 'Not available'} />
                 </ListItem>
               </List>
             </Box>
@@ -63,24 +60,14 @@ const AuthTest = () => {
             <Divider sx={{ mb: 3 }} />
             
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12}>
                 <Button
                   fullWidth
                   variant="contained"
                   color="primary"
                   onClick={() => navigate('/login')}
                 >
-                  Go to Login
-                </Button>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  color="secondary"
-                  onClick={() => navigate('/register')}
-                >
-                  Go to Register
+                  Enter Username
                 </Button>
               </Grid>
               <Grid item xs={12}>

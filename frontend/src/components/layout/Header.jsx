@@ -46,13 +46,10 @@ const Header = () => {
         </Typography>
 
         {isDefaultUser ? (
-          // Show login/register buttons for non-authenticated users
+          // Show login button for non-authenticated users
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Button color="inherit" component={Link} to="/login">
-              Login
-            </Button>
-            <Button color="inherit" component={Link} to="/register">
-              Register
+              Enter Username
             </Button>
           </Box>
         ) : (
