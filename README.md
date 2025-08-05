@@ -89,12 +89,48 @@ Smart_Grocery_Shopping_Assistant/
 ### Installation
 
 1. Clone the repository
-2. Set up the backend services
-3. Set up the frontend application
-4. Configure environment variables
-5. Start the development servers
+   ```bash
+   git clone https://github.com/yourusername/Smart_Grocery_Shopping_Assistant.git
+   cd Smart_Grocery_Shopping_Assistant
+   ```
 
-Detailed installation instructions will be provided in each component's README file.
+2. Set up the backend services
+   ```bash
+   cd backend
+   npm install
+   # Configure environment variables
+   cp .env.example .env
+   # Edit .env with your configuration
+   ```
+
+3. Set up the frontend application
+   ```bash
+   cd ../frontend
+   npm install
+   # Configure environment variables
+   cp .env.example .env
+   # Edit .env with your configuration
+   ```
+
+4. Start MongoDB and Redis
+   ```bash
+   # Using Docker (recommended)
+   docker-compose up -d mongodb redis
+   # Or use your local installations
+   ```
+
+5. Start the development servers
+   ```bash
+   # Start backend services
+   cd ../backend
+   npm run dev
+   
+   # In a new terminal, start frontend
+   cd ../frontend
+   npm start
+   ```
+
+The application should now be running at http://localhost:3000
 
 ## Development Roadmap
 

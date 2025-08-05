@@ -16,19 +16,29 @@ dotenv.config();
 // Validate environment variables
 validateEnv();
 
-// Connect to database
-(async () => {
+const app = express();
+
+// Connect to database and start server
+const startServer = async () => {
   try {
     const conn = await connectDB();
     if (!conn && process.env.NODE_ENV === 'development') {
       console.log('Server starting without database connection in development mode'.yellow.bold);
     }
+    
+    // Start the server after database connection attempt
+    const PORT = process.env.PORT || 5001;
+    
+    app.listen(PORT, () => {
+      console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold);
+    });
   } catch (error) {
     console.error(`Server initialization error: ${error.message}`.red.bold);
+    if (process.env.NODE_ENV === 'production') {
+      process.exit(1);
+    }
   }
-})();
-
-const app = express();
+};
 
 // Middleware
 // Configure CORS properly
@@ -89,9 +99,5 @@ if (process.env.NODE_ENV === 'production') {
 // Error handler middleware
 app.use(errorHandler);
 
-// Change the default port from 5000 to another port (e.g., 5001)
-const PORT = process.env.PORT || 5001;
-
-app.listen(PORT, () => {
-  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold);
-});
+// Start the server
+startServer();

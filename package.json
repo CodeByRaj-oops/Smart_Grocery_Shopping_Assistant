@@ -8,10 +8,11 @@
     "server": "nodemon backend/server.js",
     "client": "npm start --prefix frontend",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "install-server": "npm install",
+    "install-server": "npm install --prefix backend",
     "install-client": "npm install --prefix frontend",
-    "install": "npm run install-server && npm run install-client",
-    "build": "npm run build --prefix frontend"
+    "install-all": "npm install && npm run install-server && npm run install-client",
+    "build": "npm run build --prefix frontend",
+    "setup": "node setup.js"
   },
   "keywords": [
     "grocery",
