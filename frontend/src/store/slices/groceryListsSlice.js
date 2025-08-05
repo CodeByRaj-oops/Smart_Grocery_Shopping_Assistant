@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axiosInstance from '../../utils/axiosConfig';
 
 const initialState = {
   groceryLists: [],
@@ -15,14 +15,7 @@ export const getGroceryLists = createAsyncThunk(
   'groceryLists/getAll',
   async (_, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth.user.token;
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
-      const response = await axios.get('/api/grocery-lists', config);
+      const response = await axiosInstance.get('/api/grocery-lists');
       return response.data;
     } catch (error) {
       const message =
@@ -41,14 +34,7 @@ export const getGroceryList = createAsyncThunk(
   'groceryLists/getOne',
   async (id, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth.user.token;
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
-      const response = await axios.get(`/api/grocery-lists/${id}`, config);
+      const response = await axiosInstance.get(`/api/grocery-lists/${id}`);
       return response.data;
     } catch (error) {
       const message =
@@ -67,14 +53,7 @@ export const createGroceryList = createAsyncThunk(
   'groceryLists/create',
   async (listData, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth.user.token;
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
-      const response = await axios.post('/api/grocery-lists', listData, config);
+      const response = await axiosInstance.post('/api/grocery-lists', listData);
       return response.data;
     } catch (error) {
       const message =
@@ -93,14 +72,7 @@ export const updateGroceryList = createAsyncThunk(
   'groceryLists/update',
   async ({ id, listData }, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth.user.token;
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
-      const response = await axios.put(`/api/grocery-lists/${id}`, listData, config);
+      const response = await axiosInstance.put(`/api/grocery-lists/${id}`, listData);
       return response.data;
     } catch (error) {
       const message =
@@ -119,14 +91,7 @@ export const deleteGroceryList = createAsyncThunk(
   'groceryLists/delete',
   async (id, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth.user.token;
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
-      await axios.delete(`/api/grocery-lists/${id}`, config);
+      await axiosInstance.delete(`/api/grocery-lists/${id}`);
       return id;
     } catch (error) {
       const message =

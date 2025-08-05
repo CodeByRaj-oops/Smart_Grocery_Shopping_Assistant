@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axiosInstance from '../../utils/axiosConfig';
 
 const initialState = {
   inventory: [],
@@ -14,14 +14,7 @@ export const getInventory = createAsyncThunk(
   'inventory/getAll',
   async (_, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth.user.token;
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
-      const response = await axios.get('/api/inventory', config);
+      const response = await axiosInstance.get('/api/inventory');
       return response.data;
     } catch (error) {
       const message =
@@ -40,14 +33,7 @@ export const addInventoryItem = createAsyncThunk(
   'inventory/add',
   async (itemData, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth.user.token;
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
-      const response = await axios.post('/api/inventory', itemData, config);
+      const response = await axiosInstance.post('/api/inventory', itemData);
       return response.data;
     } catch (error) {
       const message =
@@ -66,14 +52,7 @@ export const updateInventoryItem = createAsyncThunk(
   'inventory/update',
   async ({ id, itemData }, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth.user.token;
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
-      const response = await axios.put(`/api/inventory/${id}`, itemData, config);
+      const response = await axiosInstance.put(`/api/inventory/${id}`, itemData);
       return response.data;
     } catch (error) {
       const message =
@@ -92,14 +71,7 @@ export const deleteInventoryItem = createAsyncThunk(
   'inventory/delete',
   async (id, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth.user.token;
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
-      await axios.delete(`/api/inventory/${id}`, config);
+      await axiosInstance.delete(`/api/inventory/${id}`);
       return id;
     } catch (error) {
       const message =

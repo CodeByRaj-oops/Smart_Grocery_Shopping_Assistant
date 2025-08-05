@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { login, reset } from '../store/slices/authSlice';
 import {
   Container,
@@ -13,8 +13,9 @@ import {
   Link,
   Alert,
   CircularProgress,
+  Divider,
 } from '@mui/material';
-import { Lock as LockIcon } from '@mui/icons-material';
+import { Lock as LockIcon, Google as GoogleIcon } from '@mui/icons-material';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -22,10 +23,12 @@ const Login = () => {
     password: '',
   });
   const [formErrors, setFormErrors] = useState({});
+  const [oauthError, setOauthError] = useState(null);
 
   const { email, password } = formData;
 
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
 
   const { user, isLoading, isError, isSuccess, message } = useSelector(
@@ -33,6 +36,13 @@ const Login = () => {
   );
 
   useEffect(() => {
+    // Check for OAuth errors from the callback redirect
+    if (location.state && location.state.error) {
+      setOauthError(location.state.error);
+      // Clear the location state to prevent showing the error again on refresh
+      window.history.replaceState({}, document.title);
+    }
+
     if (isError) {
       // Form validation errors can be handled here
     }
@@ -42,21 +52,19 @@ const Login = () => {
     }
 
     dispatch(reset());
-  }, [user, isError, isSuccess, message, navigate, dispatch]);
+  }, [user, isError, isSuccess, message, navigate, dispatch, location.state]);
 
   const validateForm = () => {
     const errors = {};
     
     if (!email) {
       errors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
+    } else if (!/^\S+@\S+\.\S+$/.test(email)) {
       errors.email = 'Email is invalid';
     }
     
     if (!password) {
       errors.password = 'Password is required';
-    } else if (password.length < 6) {
-      errors.password = 'Password must be at least 6 characters';
     }
     
     setFormErrors(errors);
@@ -73,7 +81,7 @@ const Login = () => {
     if (formErrors[e.target.name]) {
       setFormErrors({
         ...formErrors,
-        [e.target.name]: undefined,
+        [e.target.name]: '',
       });
     }
   };
@@ -93,19 +101,18 @@ const Login = () => {
 
   return (
     <Container component="main" maxWidth="xs">
-      <Paper
-        elevation={3}
+      <Box
         sx={{
-          mt: 8,
-          p: 4,
+          marginTop: 8,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          borderRadius: 2,
         }}
       >
-        <Box
+        <Paper
+          elevation={3}
           sx={{
+            padding: 4,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -115,27 +122,25 @@ const Login = () => {
           <Box
             sx={{
               backgroundColor: 'primary.main',
+              color: 'white',
               borderRadius: '50%',
               p: 1,
               mb: 2,
             }}
           >
-            <LockIcon sx={{ color: 'white' }} />
+            <LockIcon fontSize="large" />
           </Box>
-          <Typography component="h1" variant="h5" gutterBottom>
+          <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 3 }}>
-            Welcome back to Smart Grocery Assistant
-          </Typography>
-
-          {isError && (
-            <Alert severity="error" sx={{ width: '100%', mb: 2 }}>
-              {message}
+          
+          {(isError || oauthError) && (
+            <Alert severity="error" sx={{ mt: 2, width: '100%' }}>
+              {oauthError || message}
             </Alert>
           )}
-
-          <Box component="form" onSubmit={onSubmit} sx={{ width: '100%' }}>
+          
+          <Box component="form" onSubmit={onSubmit} noValidate sx={{ mt: 1, width: '100%' }}>
             <TextField
               margin="normal"
               required
@@ -147,7 +152,7 @@ const Login = () => {
               autoFocus
               value={email}
               onChange={onChange}
-              error={!!formErrors.email}
+              error={Boolean(formErrors.email)}
               helperText={formErrors.email}
             />
             <TextField
@@ -161,35 +166,49 @@ const Login = () => {
               autoComplete="current-password"
               value={password}
               onChange={onChange}
-              error={!!formErrors.password}
+              error={Boolean(formErrors.password)}
               helperText={formErrors.password}
             />
-
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2, py: 1.5 }}
+              sx={{ mt: 3, mb: 2 }}
               disabled={isLoading}
             >
               {isLoading ? <CircularProgress size={24} /> : 'Sign In'}
             </Button>
-
-            <Grid container justifyContent="space-between">
-              <Grid item>
+            
+            <Divider sx={{ my: 2 }}>
+              <Typography variant="body2" color="text.secondary">
+                OR
+              </Typography>
+            </Divider>
+            
+            <Button
+              fullWidth
+              variant="outlined"
+              startIcon={<GoogleIcon />}
+              sx={{ mb: 2 }}
+              onClick={() => window.location.href = '/api/auth/google'}
+            >
+              Sign in with Google
+            </Button>
+            <Grid container>
+              <Grid item xs>
                 <Link href="#" variant="body2">
                   Forgot password?
                 </Link>
               </Grid>
               <Grid item>
                 <Link href="/register" variant="body2">
-                  Don't have an account? Sign Up
+                  {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
             </Grid>
           </Box>
-        </Box>
-      </Paper>
+        </Paper>
+      </Box>
     </Container>
   );
 };
