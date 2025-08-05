@@ -1,11 +1,27 @@
 const errorHandler = (err, req, res, next) => {
-  const statusCode = res.statusCode ? res.statusCode : 500;
+  let statusCode = res.statusCode ? res.statusCode : 500;
+  let errorCode = 'SERVER_ERROR';
+  
+  // Handle specific error types
+  if (err.name === 'ValidationError') {
+    statusCode = 400;
+    errorCode = 'VALIDATION_ERROR';
+  } else if (err.name === 'JsonWebTokenError') {
+    statusCode = 401;
+    errorCode = 'INVALID_TOKEN';
+  } else if (err.name === 'TokenExpiredError') {
+    statusCode = 401;
+    errorCode = 'TOKEN_EXPIRED';
+  } else if (err.code === 11000) { // MongoDB duplicate key error
+    statusCode = 409;
+    errorCode = 'DUPLICATE_ERROR';
+  }
 
   res.status(statusCode);
 
   res.json({
     error: {
-      code: err.code || 'SERVER_ERROR',
+      code: err.code || errorCode,
       message: err.message,
       details: err.details || null,
       timestamp: new Date().toISOString(),
