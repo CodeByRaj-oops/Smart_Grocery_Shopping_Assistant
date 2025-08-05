@@ -19,7 +19,7 @@ const Footer = () => {
         <Grid container spacing={3}>
           <Grid item xs={12} sm={4}>
             <Typography variant="h6" color="text.primary" gutterBottom>
-              Smart Grocery Assistant
+              ShopSmartly
             </Typography>
             <Typography variant="body2" color="text.secondary">
               Making grocery shopping smarter and more efficient.
@@ -66,7 +66,7 @@ const Footer = () => {
         
         <Box sx={{ mt: 3, borderTop: 1, borderColor: 'divider', pt: 2, textAlign: 'center' }}>
           <Typography variant="body2" color="text.secondary">
-            © {new Date().getFullYear()} Smart Grocery Assistant. All rights reserved.
+            © {new Date().getFullYear()} ShopSmartly. All rights reserved.
           </Typography>
         </Box>
       </Container>

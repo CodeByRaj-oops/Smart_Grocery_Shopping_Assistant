@@ -41,7 +41,6 @@ import {
   AttachMoney as MoneyIcon,
   MoreVert as MoreVertIcon,
   Add as AddIcon,
-  Route as RouteIcon,
 } from '@mui/icons-material';
 import {
   getGroceryList,
@@ -307,14 +306,6 @@ const GroceryListDetail = () => {
           </Box>
           
           <Box>
-            <Button 
-              variant="outlined" 
-              startIcon={<RouteIcon />}
-              onClick={() => navigate(`/lists/${id}/route`)}
-              sx={{ mr: 1 }}
-            >
-              Optimize Route
-            </Button>
             <Button 
               variant="contained" 
               startIcon={<AddIcon />}

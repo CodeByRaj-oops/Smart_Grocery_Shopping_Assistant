@@ -13,8 +13,8 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     const user = JSON.parse(localStorage.getItem('user'));
-    if (user && user.token) {
-      config.headers.Authorization = `Bearer ${user.token}`;
+    if (user && user.accessToken) {
+      config.headers.Authorization = `Bearer ${user.accessToken}`;
     }
     return config;
   },
@@ -44,12 +44,16 @@ axiosInstance.interceptors.response.use(
           });
           
           if (response.data) {
-            // Update the user in localStorage
-            localStorage.setItem('user', JSON.stringify(response.data));
+            // Update the user in localStorage with new access token
+            const updatedUser = {
+              ...user,
+              accessToken: response.data.accessToken
+            };
+            localStorage.setItem('user', JSON.stringify(updatedUser));
             
             // Update the authorization header
-            axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
-            originalRequest.headers['Authorization'] = `Bearer ${response.data.token}`;
+            axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.accessToken}`;
+            originalRequest.headers['Authorization'] = `Bearer ${response.data.accessToken}`;
             
             // Retry the original request
             return axiosInstance(originalRequest);
@@ -57,31 +61,11 @@ axiosInstance.interceptors.response.use(
         }
       } catch (refreshError) {
         console.error('Token refresh failed:', refreshError);
-        // Create a default user if refresh fails
-        const defaultUser = {
-          id: '1',
-          name: 'Default User',
-          email: 'user@example.com',
-          token: 'default-token',
-          refreshToken: 'default-refresh-token'
-        };
-        localStorage.setItem('user', JSON.stringify(defaultUser));
-        // Update headers with default token
-        originalRequest.headers['Authorization'] = `Bearer ${defaultUser.token}`;
-        return axiosInstance(originalRequest);
+        // If refresh fails, redirect to login
+        localStorage.removeItem('user');
+        window.location.href = '/login';
+        return Promise.reject(refreshError);
       }
-    }
-    
-    // If the error is 401 and we've already tried to refresh, use default user
-    if (error.response.status === 401) {
-      const defaultUser = {
-        id: '1',
-        name: 'Default User',
-        email: 'user@example.com',
-        token: 'default-token',
-        refreshToken: 'default-refresh-token'
-      };
-      localStorage.setItem('user', JSON.stringify(defaultUser));
     }
     
     return Promise.reject(error);

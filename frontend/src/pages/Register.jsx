@@ -161,7 +161,7 @@ const Register = () => {
             Create Account
           </Typography>
           <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 3 }}>
-            Join Smart Grocery Assistant to simplify your shopping
+            Join ShopSmartly to simplify your shopping
           </Typography>
 
           <Stepper activeStep={activeStep} sx={{ width: '100%', mb: 4 }}>

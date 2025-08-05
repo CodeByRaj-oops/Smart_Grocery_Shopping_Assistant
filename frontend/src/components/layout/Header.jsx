@@ -32,7 +32,7 @@ const Header = () => {
         </IconButton>
         
         <Typography variant="h6" component={Link} to="/" sx={{ flexGrow: 1, textDecoration: 'none', color: 'white' }}>
-          Smart Grocery
+          ShopSmartly
         </Typography>
 
         {isAuthenticated ? (

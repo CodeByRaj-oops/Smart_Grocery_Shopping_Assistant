@@ -13,6 +13,9 @@ import Layout from './components/layout/Layout';
 
 // Pages
 import Home from './pages/Home';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import OAuthCallback from './components/OAuthCallback';
 import GroceryLists from './pages/GroceryLists';
 import GroceryListDetail from './pages/GroceryListDetail';
 import GroceryListForm from './components/grocery/GroceryListForm';
@@ -55,47 +58,58 @@ function App() {
                   <Home />
                 </Layout>
               } />
-            <Route path="/lists" element={
-              <Layout>
-                <GroceryLists />
-              </Layout>
-            } />
-            <Route path="/lists/:id" element={
-              <Layout>
-                <GroceryListDetail />
-              </Layout>
-            } />
-            <Route path="/lists/new" element={
-              <Layout>
-                <GroceryListForm />
-              </Layout>
-            } />
-            <Route path="/test-auth" element={
-              <Layout>
-                <TestAuth />
-              </Layout>
-            } />
-            <Route path="/lists/edit/:id" element={
-              <Layout>
-                <GroceryListForm />
-              </Layout>
-            } />
-            <Route path="/inventory" element={
-              <Layout>
-                <Inventory />
-              </Layout>
-            } />
-            <Route path="/inventory/new" element={
-              <Layout>
-                <InventoryItemForm />
-              </Layout>
-            } />
-            <Route path="/inventory/edit/:id" element={
-              <Layout>
-                <InventoryItemForm />
-              </Layout>
-            } />
-          </Routes>
+              <Route path="/login" element={
+                <Layout>
+                  <Login />
+                </Layout>
+              } />
+              <Route path="/register" element={
+                <Layout>
+                  <Register />
+                </Layout>
+              } />
+              <Route path="/oauth-callback" element={<OAuthCallback />} />
+              <Route path="/lists" element={
+                <Layout>
+                  <GroceryLists />
+                </Layout>
+              } />
+              <Route path="/lists/:id" element={
+                <Layout>
+                  <GroceryListDetail />
+                </Layout>
+              } />
+              <Route path="/lists/new" element={
+                <Layout>
+                  <GroceryListForm />
+                </Layout>
+              } />
+              <Route path="/test-auth" element={
+                <Layout>
+                  <TestAuth />
+                </Layout>
+              } />
+              <Route path="/lists/edit/:id" element={
+                <Layout>
+                  <GroceryListForm />
+                </Layout>
+              } />
+              <Route path="/inventory" element={
+                <Layout>
+                  <Inventory />
+                </Layout>
+              } />
+              <Route path="/inventory/new" element={
+                <Layout>
+                  <InventoryItemForm />
+                </Layout>
+              } />
+              <Route path="/inventory/edit/:id" element={
+                <Layout>
+                  <InventoryItemForm />
+                </Layout>
+              } />
+            </Routes>
           </AutoLogin>
         </Router>
       </ThemeProvider>
