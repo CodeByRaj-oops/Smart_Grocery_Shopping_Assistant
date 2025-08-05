@@ -25,8 +25,8 @@ const initialState = {
 };
   // Simplified auth slice with no API calls
 
-// Logout user (just removes from localStorage)
-export const logout = () => {
+// Renamed to logoutUser to avoid naming conflict
+const logoutUser = () => {
   localStorage.removeItem('user');
   // Set default user again
   localStorage.setItem('user', JSON.stringify(defaultUser));
@@ -50,9 +50,13 @@ export const authSlice = createSlice({
       state.isSuccess = true;
       state.isError = false;
       state.message = '';
+      // Add localStorage handling here to ensure it happens
+      localStorage.removeItem('user');
+      localStorage.setItem('user', JSON.stringify(defaultUser));
     }
   }
 });
 
 export const { reset, logout } = authSlice.actions;
+export { logoutUser }; // Export the renamed function
 export default authSlice.reducer;

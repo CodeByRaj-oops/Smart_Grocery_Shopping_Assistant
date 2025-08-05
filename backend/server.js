@@ -2,12 +2,19 @@ const express = require('express');
 const dotenv = require('dotenv');
 const colors = require('colors');
 const cors = require('cors');
+const path = require('path'); // Add path module
 const mongoose = require('mongoose');
 const { errorHandler } = require('./middleware/errorMiddleware');
 const connectDB = require('./config/db');
 
+// Add at the top after dotenv.config();
+const validateEnv = require('./utils/validateEnv');
+
 // Load environment variables
 dotenv.config();
+
+// Validate environment variables
+validateEnv();
 
 // Connect to database
 (async () => {
@@ -24,11 +31,17 @@ dotenv.config();
 const app = express();
 
 // Middleware
-app.use(cors());
+// Configure CORS properly
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  credentials: true
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Routes
+app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/lists', require('./routes/groceryListRoutes'));
 app.use('/api/inventory', require('./routes/inventoryRoutes'));
@@ -66,7 +79,7 @@ app.get('/health', (req, res) => {
 
 // Serve frontend in production
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('frontend/build'));
+  app.use(express.static(path.join(__dirname, '../frontend/build')));
   
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, '../frontend', 'build', 'index.html'));

@@ -6,6 +6,7 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true, // Important for CORS with credentials
 });
 
 // Add a request interceptor
@@ -35,7 +36,7 @@ api.interceptors.response.use(
     
     // If the error status is 401 and there is no originalRequest._retry flag,
     // it means the token has expired and we need to refresh it
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (error.response && error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       
       try {
@@ -43,7 +44,7 @@ api.interceptors.response.use(
         
         if (user && user.refreshToken) {
           // Call refresh token endpoint
-          const response = await axios.post('/api/users/refresh-token', {
+          const response = await axios.post('/api/auth/refresh-token', {
             refreshToken: user.refreshToken,
           });
           
@@ -62,18 +63,10 @@ api.interceptors.response.use(
           return api(originalRequest);
         }
       } catch (refreshError) {
-        // Create a default user if refresh fails
-        const defaultUser = {
-          id: '1',
-          name: 'Default User',
-          email: 'user@example.com',
-          token: 'default-token',
-          refreshToken: 'default-refresh-token'
-        };
-        localStorage.setItem('user', JSON.stringify(defaultUser));
-        // Update headers with default token
-        originalRequest.headers.Authorization = `Bearer ${defaultUser.token}`;
-        return api(originalRequest);
+        // If refresh fails, redirect to login
+        localStorage.removeItem('user');
+        window.location.href = '/login';
+        return Promise.reject(refreshError);
       }
     }
     

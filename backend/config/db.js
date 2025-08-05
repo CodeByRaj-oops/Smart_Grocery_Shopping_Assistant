@@ -6,6 +6,15 @@ const connectDB = async () => {
     // Log the MongoDB URI being used (without sensitive credentials)
     console.log(`Attempting to connect to MongoDB...`.yellow);
     
+    if (!process.env.MONGO_URI) {
+      console.error(`MongoDB URI is not defined in environment variables`.red.bold);
+      if (process.env.NODE_ENV === 'production') {
+        process.exit(1);
+      } else {
+        console.log(`Using default local MongoDB URI in development mode`.yellow);
+      }
+    }
+    
     // Set mongoose options
     const options = {
       useNewUrlParser: true,
