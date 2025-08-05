@@ -42,7 +42,7 @@ const Header = () => {
           ShopSmartly
         </Typography>
 
-        {/* Always show authenticated UI */
+        {/* Always show authenticated UI */}
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <IconButton color="inherit" component={Link} to="/lists">
               <ShoppingCart />
