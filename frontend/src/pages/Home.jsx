@@ -36,23 +36,12 @@ const Home = () => {
   const { inventory, isLoading: inventoryLoading } = useSelector((state) => state.inventory);
   
   useEffect(() => {
-    // Auto-create user if not exists
-    if (!user) {
-      const defaultUser = {
-        id: '1',
-        name: 'Default User',
-        email: 'user@example.com',
-        token: 'default-token',
-        refreshToken: 'default-refresh-token'
-      };
-      localStorage.setItem('user', JSON.stringify(defaultUser));
-      dispatch(getGroceryLists());
-      dispatch(getInventory());
-    } else {
+    // Only dispatch actions if user exists
+    if (user) {
       dispatch(getGroceryLists());
       dispatch(getInventory());
     }
-  }, [user, navigate, dispatch]);
+  }, [user, dispatch]);
   
   // Calculate low stock items
   const lowStockItems = inventory.items ? inventory.items.filter(item => 
