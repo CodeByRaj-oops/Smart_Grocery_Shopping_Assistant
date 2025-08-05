@@ -21,8 +21,6 @@ import {
   ShoppingCart,
   Kitchen,
   Notifications,
-  Restaurant,
-  TrendingUp,
   CheckCircle,
   Warning,
 } from '@mui/icons-material';
@@ -95,7 +93,7 @@ const Home = () => {
               Quick Actions
             </Typography>
             <Grid container spacing={2} sx={{ mt: 1 }}>
-              <Grid item xs={6} sm={3}>
+              <Grid item xs={6} sm={6}>
                 <Button
                   variant="outlined"
                   fullWidth
@@ -106,7 +104,7 @@ const Home = () => {
                   New List
                 </Button>
               </Grid>
-              <Grid item xs={6} sm={3}>
+              <Grid item xs={6} sm={6}>
                 <Button
                   variant="outlined"
                   fullWidth
@@ -115,28 +113,6 @@ const Home = () => {
                   sx={{ height: '100%' }}
                 >
                   Add Item
-                </Button>
-              </Grid>
-              <Grid item xs={6} sm={3}>
-                <Button
-                  variant="outlined"
-                  fullWidth
-                  startIcon={<Restaurant />}
-                  onClick={() => navigate('/recipes')}
-                  sx={{ height: '100%' }}
-                >
-                  Recipes
-                </Button>
-              </Grid>
-              <Grid item xs={6} sm={3}>
-                <Button
-                  variant="outlined"
-                  fullWidth
-                  startIcon={<TrendingUp />}
-                  onClick={() => navigate('/analytics')}
-                  sx={{ height: '100%' }}
-                >
-                  Analytics
                 </Button>
               </Grid>
             </Grid>
