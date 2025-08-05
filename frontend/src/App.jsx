@@ -13,34 +13,25 @@ import Layout from './components/layout/Layout';
 
 // Pages
 import Home from './pages/Home';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import OAuthCallback from './components/OAuthCallback';
 import GroceryLists from './pages/GroceryLists';
 import GroceryListDetail from './pages/GroceryListDetail';
 import GroceryListForm from './components/grocery/GroceryListForm';
 import Inventory from './pages/Inventory';
 import InventoryItemForm from './components/inventory/InventoryItemForm';
-import TestAuth from './components/auth/TestAuth';
 
-// Auto-login component
-const AutoLogin = ({ children }) => {
-  const dispatch = useDispatch();
-  
+// Default user component
+const DefaultUser = ({ children }) => {
   useEffect(() => {
-    // Create a default user if none exists
-    const user = JSON.parse(localStorage.getItem('user'));
-    if (!user) {
-      const defaultUser = {
-        id: '1',
-        name: 'Default User',
-        email: 'user@example.com',
-        token: 'default-token',
-        refreshToken: 'default-refresh-token'
-      };
-      localStorage.setItem('user', JSON.stringify(defaultUser));
-    }
-  }, [dispatch]);
+    // Always create a default user
+    const defaultUser = {
+      id: '1',
+      name: 'Default User',
+      email: 'user@example.com',
+      token: 'default-token',
+      refreshToken: 'default-refresh-token'
+    };
+    localStorage.setItem('user', JSON.stringify(defaultUser));
+  }, []);
   
   return children;
 };
@@ -51,24 +42,13 @@ function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Router>
-          <AutoLogin>
+          <DefaultUser>
             <Routes>
               <Route path="/" element={
                 <Layout>
                   <Home />
                 </Layout>
               } />
-              <Route path="/login" element={
-                <Layout>
-                  <Login />
-                </Layout>
-              } />
-              <Route path="/register" element={
-                <Layout>
-                  <Register />
-                </Layout>
-              } />
-              <Route path="/oauth-callback" element={<OAuthCallback />} />
               <Route path="/lists" element={
                 <Layout>
                   <GroceryLists />

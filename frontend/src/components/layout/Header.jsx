@@ -16,9 +16,6 @@ const Header = () => {
     setAnchorEl(null);
   };
 
-  // Always authenticated
-  const isAuthenticated = true;
-
   return (
     <AppBar position="static" color="primary">
       <Toolbar>
@@ -35,7 +32,7 @@ const Header = () => {
           ShopSmartly
         </Typography>
 
-        {isAuthenticated ? (
+        {/* Always show authenticated UI */
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <IconButton color="inherit" component={Link} to="/lists">
               <ShoppingCart />
@@ -72,12 +69,6 @@ const Header = () => {
               <MenuItem onClick={handleClose}>Logout</MenuItem>
             </Menu>
           </Box>
-        ) : (
-          <Box>
-            <Button color="inherit" component={Link} to="/login">Login</Button>
-            <Button color="inherit" component={Link} to="/register">Register</Button>
-          </Box>
-        )}
       </Toolbar>
     </AppBar>
   );
