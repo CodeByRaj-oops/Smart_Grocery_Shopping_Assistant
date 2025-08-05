@@ -1,8 +1,10 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, Button, IconButton, Box, Avatar, Menu, MenuItem } from '@mui/material';
+import { AppBar, Toolbar, Typography, IconButton, Box, Menu, MenuItem } from '@mui/material';
 import { ShoppingCart, Menu as MenuIcon, AccountCircle, Notifications } from '@mui/icons-material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../store/slices/authSlice';
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null);
